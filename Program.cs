@@ -270,7 +270,24 @@ namespace BasicLibrary
 
         static void ReturnBook()
         {
+            foreach (var Book in Books)
+            {
+                Console.WriteLine(Book.BName);
+            }
 
+            Console.WriteLine("\nEnter the name of the book you want to return:");
+            string bookName = Console.ReadLine();
+            bool borrowed = false;
+
+            for (int i = 0; i < Books.Count; i++)
+            {
+                if (Books[i].BName == bookName && Books[i].Quantity >= 0)
+                {
+                    Books[i] = (Books[i].BName, Books[i].BAuthor, Books[i].ID, Books[i].Quantity + 1);
+                    Console.WriteLine("Book has been returned successfully");
+                    borrowed = true;
+                }
+            }
         }
 
         static void LoadBooksFromFile()
