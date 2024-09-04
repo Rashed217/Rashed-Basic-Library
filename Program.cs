@@ -4,7 +4,7 @@ namespace BasicLibrary
 {
     internal class Program
     {
-        static List<(string BName, string BAuthor, int ID, int quantity)> Books = new List<(string BName, string BAuthor, int ID, int quantity)>();
+        static List<(string BName, string BAuthor, int ID, int Quantity)> Books = new List<(string BName, string BAuthor, int ID, int Quantity)>();
         static string filePath = "C:\\Users\\Codeline User\\Documents\\Codeline Projects\\Files\\library.txt";
 
 
@@ -21,9 +21,9 @@ namespace BasicLibrary
             {
 
                 Console.WriteLine("Press 1 for Admin Menu or press to 2 for User Menu or press 3 to save & exit");
-                Console.WriteLine("Admin Menu");
-                Console.WriteLine("User Menu");
-                Console.WriteLine("Save & Exit");
+                Console.WriteLine("1- Admin Menu");
+                Console.WriteLine("2- User Menu");
+                Console.WriteLine("3- Save & Exit");
                 int choice = int.Parse(Console.ReadLine());
 
                 switch (choice)
@@ -54,14 +54,14 @@ namespace BasicLibrary
             {
 
                 string AdminUsername = "admin";
-                Console.WriteLine("Enter the username:");
+                Console.WriteLine("Enter the username:  ( Hint: admin )");
                 string username;
                 while ((username = Console.ReadLine()) != "admin")
                 {
                     Console.WriteLine("Invalid username, try again: ");
                 }
 
-                Console.WriteLine("\nEnter the password:");
+                Console.WriteLine("\nEnter the password:  ( Hint: 12345 )");
                 string AdminPassword = "12345";
                 string password;
                 while ((password = Console.ReadLine()) != "12345")
@@ -89,7 +89,7 @@ namespace BasicLibrary
                             break;
 
                         case 2:
-                            ViewAllBooks();
+                            ShowAllBooks();
                             break;
 
                         case 3:
@@ -173,14 +173,14 @@ namespace BasicLibrary
                 int ID = int.Parse(Console.ReadLine());
 
                 Console.WriteLine("Enter Book Quantity");
-                int quantity = int.Parse(Console.ReadLine());
+                int Quantity = int.Parse(Console.ReadLine());
 
-                Books.Add((name, author, ID, quantity));
+                Books.Add((name, author, ID, Quantity));
                 Console.WriteLine("Book Added Succefully");
 
             }
 
-        static void ViewAllBooks()
+        static void ShowAllBooks()
             {
                 StringBuilder sb = new StringBuilder();
 
@@ -194,6 +194,8 @@ namespace BasicLibrary
                     sb.Append("Book ").Append(BookNumber).Append(" Author : ").Append(Books[i].BAuthor);
                     sb.AppendLine();
                     sb.Append("Book ").Append(BookNumber).Append(" ID : ").Append(Books[i].ID);
+                    sb.AppendLine();
+                    sb.Append("Book ").Append(BookNumber).Append(" Quantity : ").Append(Books[i].Quantity);
                     sb.AppendLine().AppendLine();
                     Console.WriteLine(sb.ToString());
                     sb.Clear();
@@ -213,7 +215,7 @@ namespace BasicLibrary
                     {
                       Console.WriteLine("Book Author is : " + Books[i].BAuthor);
                       Console.WriteLine("Book ID is : " + Books[i].ID);
-                      Console.WriteLine("Quantity Available : " + Books[i].quantity);
+                      Console.WriteLine("Quantity Available : " + Books[i].Quantity);
                       flag = true;
                       break;
                     }
@@ -225,16 +227,35 @@ namespace BasicLibrary
 
         static void BorrowBook()
         {
+            
+            foreach (string BName in Books)
+            {
+                Console.WriteLine(BName);
+            }
+
             Console.WriteLine("Enter the name of the book you want to borrow:");
             string bookName = Console.ReadLine();
             bool borrowed = false;
 
             for (int i = 0;i < Books.Count;i++)
             {
-                if (Books[i].BName == bookName && Books[i].quantity > 0)
+                if (Books[i].BName == bookName && Books[i].Quantity > 0)
                 {
-                    Books[i] = (Books[i].BName, Books[i].BAuthor, Books[i].ID, Books[i].quantity -1);
+                    Books[i] = (Books[i].BName, Books[i].BAuthor, Books[i].ID, Books[i].Quantity -1);
                     Console.WriteLine("Book has been borrowed successfully");
+                    borrowed = true;
+                }
+
+                if (Books[i].BName == bookName && Books[i].Quantity <= 0)
+                {
+                    Console.WriteLine("Books is already borrowed");
+                    borrowed = true;
+                }
+
+                if (Books[i].BName != bookName)
+                {
+                    Console.WriteLine("Book not found");
+                    borrowed = false;
                 }
             }
 
@@ -280,7 +301,7 @@ namespace BasicLibrary
                     {
                         foreach (var book in Books)
                         {
-                            writer.WriteLine($"{book.BName}|{book.BAuthor}|{book.ID} |{book.quantity}");
+                            writer.WriteLine($"{book.BName}|{book.BAuthor}|{book.ID} |{book.Quantity}");
                         }
                     }
                     Console.WriteLine("Books saved to file successfully.");
