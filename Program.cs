@@ -50,8 +50,25 @@ namespace BasicLibrary
 
 
 
-            static void AdminMenu()
+        static void AdminMenu()
             {
+
+                string AdminUsername = "admin";
+                Console.WriteLine("Enter the username:");
+                string username;
+                while ((username = Console.ReadLine()) != "admin")
+                {
+                    Console.WriteLine("Invalid username, try again: ");
+                }
+
+                Console.WriteLine("\nEnter the password:");
+                string AdminPassword = "12345";
+                string password;
+                while ((password = Console.ReadLine()) != "12345")
+                {
+                    Console.WriteLine("Invalid password");
+                }
+
                 bool ExitFlag = false;
 
                 do
@@ -100,7 +117,8 @@ namespace BasicLibrary
                 } while (ExitFlag != true);
             }
 
-            static void UserMenu()
+        static void UserMenu()
+
             {
                 bool ExitFlag = false;
 
@@ -143,7 +161,7 @@ namespace BasicLibrary
 
         }
 
-            static void AddNewBook()
+        static void AddNewBook()
             {
                 Console.WriteLine("Enter Book Name");
                 string name = Console.ReadLine();
@@ -162,7 +180,7 @@ namespace BasicLibrary
 
             }
 
-            static void ViewAllBooks()
+        static void ViewAllBooks()
             {
                 StringBuilder sb = new StringBuilder();
 
@@ -183,7 +201,7 @@ namespace BasicLibrary
                 }
             }
 
-            static void SearchForBook()
+        static void SearchForBook()
             {
                 Console.WriteLine("Enter the book name you want");
                 string name = Console.ReadLine();
@@ -203,7 +221,17 @@ namespace BasicLibrary
                 { Console.WriteLine("book not found"); }
             }
 
-            static void LoadBooksFromFile()
+        static void BorrowBook()
+        {
+
+        }
+
+        static void ReturnBook()
+        {
+
+        }
+
+        static void LoadBooksFromFile()
             {
                 try
                 {
@@ -230,7 +258,7 @@ namespace BasicLibrary
                 }
             }
 
-            static void SaveBooksToFile()
+        static void SaveBooksToFile()
             {
                 try
                 {
@@ -238,7 +266,7 @@ namespace BasicLibrary
                     {
                         foreach (var book in Books)
                         {
-                            writer.WriteLine($"{book.BName}|{book.BAuthor}|{book.ID}");
+                            writer.WriteLine($"{book.BName}|{book.BAuthor}|{book.ID} |{book.quantity}");
                         }
                     }
                     Console.WriteLine("Books saved to file successfully.");
@@ -249,9 +277,7 @@ namespace BasicLibrary
                 }
             }
 
-        }
-
-
+     }
  
  }
 
