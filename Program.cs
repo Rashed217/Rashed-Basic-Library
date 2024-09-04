@@ -17,68 +17,26 @@ namespace BasicLibrary
 
             LoadBooksFromFile();
 
-        do {
-
-            Console.WriteLine("Press 1 for Admin Menu or press to 2 for User Menu or press 3 to save & exit");
-            Console.WriteLine("Admin Menu");
-            Console.WriteLine("User Menu");
-            Console.WriteLine("Save & Exit");
-            int choice = int.Parse(Console.ReadLine());
-
-            switch(choice)
-            {
-                case 1:
-                    AdminMenu();
-                    break;
-
-                case 2:
-                    UserMenu();
-                    break;
-
-                case 3:
-                    SaveBooksToFile();
-                    ExitFlag = true;
-                    break;
-
-                default:
-                    Console.WriteLine("Please enter a valid choice");
-                    break;
-            }
-
-        } while (ExitFlag != true);
-
-
-
-        static void AdminMenu()
-        {
-            bool ExitFlag = false;
-
             do
             {
-                Console.WriteLine("Welcome to Library");
-                Console.WriteLine("\n Enter the char of operation you need :");
-                Console.WriteLine("\n 1- Add New Book");
-                Console.WriteLine("\n 2- Display All Books");
-                Console.WriteLine("\n 3- Search for Book by Name");
-                Console.WriteLine("\n 4- Save and Exit");
 
+                Console.WriteLine("Press 1 for Admin Menu or press to 2 for User Menu or press 3 to save & exit");
+                Console.WriteLine("Admin Menu");
+                Console.WriteLine("User Menu");
+                Console.WriteLine("Save & Exit");
                 int choice = int.Parse(Console.ReadLine());
 
                 switch (choice)
                 {
                     case 1:
-                        AddNewBook();
+                        AdminMenu();
                         break;
 
                     case 2:
-                        ViewAllBooks();
+                        UserMenu();
                         break;
 
                     case 3:
-                        SearchForBook();
-                        break;
-
-                    case 4:
                         SaveBooksToFile();
                         ExitFlag = true;
                         break;
@@ -86,23 +44,104 @@ namespace BasicLibrary
                     default:
                         Console.WriteLine("Please enter a valid choice");
                         break;
-
-
-
                 }
 
-                Console.WriteLine("press any key to continue");
-                string cont = Console.ReadLine();
-
-                Console.Clear();
-
             } while (ExitFlag != true);
-        }
+
+
+
+            static void AdminMenu()
+            {
+                bool ExitFlag = false;
+
+                do
+                {
+                    Console.WriteLine("Welcome to Library");
+                    Console.WriteLine("\n Enter the number of operation you need :");
+                    Console.WriteLine("\n 1- Add a New Book");
+                    Console.WriteLine("\n 2- Show All Books");
+                    Console.WriteLine("\n 3- Search for a Book by Name");
+                    Console.WriteLine("\n 4- Save and Exit");
+
+                    int choice = int.Parse(Console.ReadLine());
+
+                    switch (choice)
+                    {
+                        case 1:
+                            AddNewBook();
+                            break;
+
+                        case 2:
+                            ViewAllBooks();
+                            break;
+
+                        case 3:
+                            SearchForBook();
+                            break;
+
+                        case 4:
+                            SaveBooksToFile();
+                            ExitFlag = true;
+                            break;
+
+                        default:
+                            Console.WriteLine("Please enter a valid choice");
+                            break;
+
+
+
+                    }
+
+                    Console.WriteLine("press any key to continue");
+                    string cont = Console.ReadLine();
+
+                    Console.Clear();
+
+                } while (ExitFlag != true);
+            }
 
             static void UserMenu()
             {
+                bool ExitFlag = false;
 
+                do
+                {
+                    Console.WriteLine("Welcome User");
+                    Console.WriteLine("\n Enter the number of operation you need :");
+                    Console.WriteLine("\n 1- Search for a Book by Name");
+                    Console.WriteLine("\n 2- Borrow a Book");
+                    Console.WriteLine("\n 3- Return a Book ");
+                    Console.WriteLine("\n 4- Save and Exit");
+
+                    int choice = int.Parse(Console.ReadLine());
+
+                    switch (choice)
+                    {
+                        case 1:
+                            SearchForBook();
+                            break;
+
+                        case 2:
+                            BorrowBook();
+                            break;
+
+                        case 3:
+                            ReturnBook();
+                            break;
+
+                        case 4:
+                            ExitFlag = true;
+                            break;
+
+                        default:
+                            Console.WriteLine("Please enter a valid choice");
+                            break;
+
+                    }
+                } while (ExitFlag != true);
             }
+
+        }
 
             static void AddNewBook()
             {
@@ -122,7 +161,6 @@ namespace BasicLibrary
                 Console.WriteLine("Book Added Succefully");
 
             }
-        }
 
             static void ViewAllBooks()
             {
@@ -212,5 +250,8 @@ namespace BasicLibrary
             }
 
         }
-    }
+
+
+ 
+ }
 
