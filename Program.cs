@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Runtime.CompilerServices;
+using System.Text;
 
 namespace BasicLibrary
 {
@@ -204,33 +205,39 @@ namespace BasicLibrary
             }
 
         static void SearchForBook()
-            {
-                Console.WriteLine("Enter the book name you want");
-                string name = Console.ReadLine();
-                bool flag = false;
+        {
+            Console.WriteLine("Enter the book name you want");
+            string name = Console.ReadLine();
+            bool available = false;
 
-                for (int i = 0; i < Books.Count; i++)
+            for (int i = 0; i < Books.Count; i++)
+            {
+                if (Books[i].BName == name)
                 {
-                    if (Books[i].BName == name)
-                    {
-                      Console.WriteLine("Book Author is : " + Books[i].BAuthor);
-                      Console.WriteLine("Book ID is : " + Books[i].ID);
-                      Console.WriteLine("Quantity Available : " + Books[i].Quantity);
-                      flag = true;
-                      break;
-                    }
+                    Console.WriteLine("This book is available");
+                    Console.WriteLine("\nBook Author is : " + Books[i].BAuthor);
+                    Console.WriteLine("\nBook ID is : " + Books[i].ID);
+                    Console.WriteLine("\nQuantity Available : " + Books[i].Quantity);
+                    available = true;
+                    break;
                 }
 
-            if (flag != true)
-                { Console.WriteLine("book not found"); }
+                else if (Books[i].BName != name)
+                {
+                    Console.WriteLine("book not found");
+                    available = false;
+                    break;
+                }
             }
+        }
+
 
         static void BorrowBook()
         {
             
-            foreach (string BName in Books)
+            foreach (var Book in Books)
             {
-                Console.WriteLine(BName);
+                Console.WriteLine(Book.BName);
             }
 
             Console.WriteLine("Enter the name of the book you want to borrow:");
