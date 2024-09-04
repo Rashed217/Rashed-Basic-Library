@@ -4,7 +4,7 @@ namespace BasicLibrary
 {
     internal class Program
     {
-        static List<(string BName, string BAuthor, int ID, int quantity)> Books = new List<(string BName, string BAuthor, int ID, int Quantity)>();
+        static List<(string BName, string BAuthor, int ID, int quantity)> Books = new List<(string BName, string BAuthor, int ID, int quantity)>();
         static string filePath = "C:\\Users\\Codeline User\\Documents\\Codeline Projects\\Files\\library.txt";
 
 
@@ -211,18 +211,32 @@ namespace BasicLibrary
                 {
                     if (Books[i].BName == name)
                     {
-                        Console.WriteLine("Book Author is : " + Books[i].BAuthor);
-                        flag = true;
-                        break;
+                      Console.WriteLine("Book Author is : " + Books[i].BAuthor);
+                      Console.WriteLine("Book ID is : " + Books[i].ID);
+                      Console.WriteLine("Quantity Available : " + Books[i].quantity);
+                      flag = true;
+                      break;
                     }
                 }
 
-                if (flag != true)
+            if (flag != true)
                 { Console.WriteLine("book not found"); }
             }
 
         static void BorrowBook()
         {
+            Console.WriteLine("Enter the name of the book you want to borrow:");
+            string bookName = Console.ReadLine();
+            bool borrowed = false;
+
+            for (int i = 0;i < Books.Count;i++)
+            {
+                if (Books[i].BName == bookName && Books[i].quantity > 0)
+                {
+                    Books[i] = (Books[i].BName, Books[i].BAuthor, Books[i].ID, Books[i].quantity -1);
+                    Console.WriteLine("Book has been borrowed successfully");
+                }
+            }
 
         }
 
