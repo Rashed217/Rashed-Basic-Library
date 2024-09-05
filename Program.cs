@@ -9,8 +9,8 @@ namespace BasicLibrary
         static List<(string AdminName, string AdminPass)> AdminAuth = new List<(string AdminName, string AdminPass)>();
         static List<(string UserName, string UserPass)> UserAuth = new List<(string UserName, string UserPass)>();
         static string filePath = "C:\\Users\\Codeline User\\Documents\\Codeline Projects\\Files\\library.txt";
-        static string AdminFile = "C:\\Users\\Codeline User\\Documents\\Codeline Projects\\Files\\library.txt";
-        static string UserFile = "C:\\Users\\Codeline User\\Documents\\Codeline Projects\\Files\\library.txt";
+        static string AdminFile = "C:\\Users\\Codeline User\\Documents\\Codeline Projects\\Files\\Admins Registration.txt";
+        static string UserFile = "C:\\Users\\Codeline User\\Documents\\Codeline Projects\\Files\\Users Registration.txt";
 
 
 
@@ -20,12 +20,11 @@ namespace BasicLibrary
 
             bool ExitFlag = false;
 
-            LoadBooksFromFile();
 
             do
             {
 
-                Console.WriteLine("Press 1 for Admin Menu or press to 2 for User Menu or press 3 to save & exit");
+                Console.WriteLine("Press 1 for Admin Menu,  press to 2 for User Menu, press 3 for registration or press 4 to save & exit");
                 Console.WriteLine("1- Admin Menu");
                 Console.WriteLine("2- User Menu");
                 Console.WriteLine("3- Registration");
@@ -80,6 +79,8 @@ namespace BasicLibrary
                 }
 
                 bool ExitFlag = false;
+
+                LoadBooksFromFile();
 
                 do
                 {
@@ -230,11 +231,11 @@ namespace BasicLibrary
         {
             string UserName;
             string UserPass;
-            Console.WriteLine("Enter Admin's Username:");
+            Console.WriteLine("Enter Users's Username:");
             UserName = Console.ReadLine();
 
 
-            Console.WriteLine("Enter Admin's Password");
+            Console.WriteLine("Enter User's Password");
             UserPass = Console.ReadLine();
 
             UserAuth.Add((UserName, UserPass));
