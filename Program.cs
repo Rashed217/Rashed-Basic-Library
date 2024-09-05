@@ -29,7 +29,12 @@ namespace BasicLibrary
                 Console.WriteLine("2- User Menu");
                 Console.WriteLine("3- Registration");
                 Console.WriteLine("4- Save & Exit");
-                int choice = int.Parse(Console.ReadLine());
+
+                if (!int.TryParse(Console.ReadLine(), out int choice))
+                {
+                    Console.WriteLine("Invalid input. Please enter a number.");
+                    continue;
+                }
 
                 switch (choice)
                 {
@@ -94,7 +99,11 @@ namespace BasicLibrary
                     Console.WriteLine("\n 6- Display Statistics");
                     Console.WriteLine("\n 7- Save and Exit");
 
-                    int choice = int.Parse(Console.ReadLine());
+                    if (!int.TryParse(Console.ReadLine(), out int choice))
+                    {
+                        Console.WriteLine("Invalid input. Please enter a number.");
+                        continue;
+                    }
 
                     switch (choice)
                     {
@@ -157,7 +166,11 @@ namespace BasicLibrary
                     Console.WriteLine("\n 3- Return a Book ");
                     Console.WriteLine("\n 4- Save and Exit");
 
-                    int choice = int.Parse(Console.ReadLine());
+                    if (!int.TryParse(Console.ReadLine(), out int choice))
+                    {
+                        Console.WriteLine("Invalid input. Please enter a number.");
+                        continue;
+                    }
 
                     switch (choice)
                     {
