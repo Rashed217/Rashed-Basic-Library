@@ -90,7 +90,8 @@ namespace BasicLibrary
                     Console.WriteLine("\n 3- Remove a Book");
                     Console.WriteLine("\n 4- Show All Books");
                     Console.WriteLine("\n 5- Search for a Book by Name");
-                    Console.WriteLine("\n 6- Save and Exit");
+                    Console.WriteLine("\n 6- Display Statistics");
+                    Console.WriteLine("\n 7- Save and Exit");
 
                     int choice = int.Parse(Console.ReadLine());
 
@@ -117,6 +118,10 @@ namespace BasicLibrary
                             break;
 
                         case 6:
+                            DisplayStatistics();
+                            break;
+
+                        case 7:
                             SaveBooksToFile();
                             ExitFlag = true;
                             break;
@@ -383,7 +388,6 @@ namespace BasicLibrary
             }
         }
 
-
         static void BorrowBook()
         {
             
@@ -526,7 +530,31 @@ namespace BasicLibrary
             }
         }
 
-     }
- 
- }
+        static void DisplayStatistics()
+        {
+            int totalBooks = Books.Count;
+            int availableBooks = 0;
+            int borrowedBooks = 0;
+
+            foreach (var book in Books)
+            {
+                if (book.Quantity > 0)
+                {
+                    availableBooks++;
+                }
+                else
+                {
+                    borrowedBooks++;
+                }
+            }
+
+            Console.WriteLine("Library Statistics:");
+            Console.WriteLine($"Total number of books: {totalBooks}");
+            Console.WriteLine($"Number of books available: {availableBooks}");
+            Console.WriteLine($"Number of books borrowed: {borrowedBooks}");
+        }
+
+    }
+
+}
 
