@@ -10,7 +10,7 @@ namespace BasicLibrary
         static List<(string UserName, string UserPass)> UserAuth = new List<(string UserName, string UserPass)>();
         static string filePath = "C:\\Users\\Codeline User\\Documents\\Codeline Projects\\Files\\library.txt";
         static string AdminFile = "C:\\Users\\Codeline User\\Documents\\Codeline Projects\\Files\\library.txt";
-        static string UserPath = "C:\\Users\\Codeline User\\Documents\\Codeline Projects\\Files\\library.txt";
+        static string UserFile = "C:\\Users\\Codeline User\\Documents\\Codeline Projects\\Files\\library.txt";
 
 
 
@@ -258,6 +258,55 @@ namespace BasicLibrary
         static void EditBooks()
         {
 
+                Console.WriteLine("Enter the ID of the book you want to edit:");
+                int BookIdToEdit;
+                if (!int.TryParse(Console.ReadLine(), out BookIdToEdit))
+                {
+                    Console.WriteLine("Invalid ID format.");
+                    return;
+                }
+
+                int bookIndex = -1;
+                for (int i = 0; i < Books.Count; i++)
+                {
+                    if (Books[i].ID == BookIdToEdit)
+                    {
+                        bookIndex = i;
+                        break;
+                    }
+                }
+
+                if (bookIndex == -1)
+                {
+                    Console.WriteLine("Book with the given ID not found.");
+                    return;
+                }
+
+                var book = Books[bookIndex];
+
+                Console.WriteLine("Editing Book:");
+                Console.WriteLine($"Current Name: {book.BName}");
+                Console.WriteLine("Enter new Name :");
+                string newName = Console.ReadLine();
+                if (!string.IsNullOrEmpty(newName)) book = (newName, book.BAuthor, book.ID, book.Quantity);
+
+                Console.WriteLine($"Current Author: {book.BAuthor}");
+                Console.WriteLine("Enter new Author :");
+                string newAuthor = Console.ReadLine();
+                if (!string.IsNullOrEmpty(newAuthor)) book = (book.BName, newAuthor, book.ID, book.Quantity);
+
+                Console.WriteLine($"Current Quantity: {book.Quantity}");
+                Console.WriteLine("Enter new Quantity :");
+                string newQuantityStr = Console.ReadLine();
+                if (int.TryParse(newQuantityStr, out int newQuantity))
+                {
+                    book = (book.BName, book.BAuthor, book.ID, newQuantity);
+                }
+
+                Books[bookIndex] = book;
+
+                Console.WriteLine("Book details updated successfully.");
+
         }
 
         static void RemoveBooks()
@@ -424,7 +473,7 @@ namespace BasicLibrary
         {
             try
             {
-                using (StreamWriter writer = new StreamWriter(filePath))
+                using (StreamWriter writer = new StreamWriter(AdminFile))
                 {
                     foreach (var admin in AdminAuth)
                     {
@@ -443,7 +492,7 @@ namespace BasicLibrary
         {
             try
             {
-                using (StreamWriter writer = new StreamWriter(filePath))
+                using (StreamWriter writer = new StreamWriter(UserFile))
                 {
                     foreach (var user in UserAuth)
                     {
