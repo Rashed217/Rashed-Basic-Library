@@ -6,6 +6,8 @@ namespace BasicLibrary
     internal class Program
     {
         static List<(string BName, string BAuthor, int ID, int Quantity)> Books = new List<(string BName, string BAuthor, int ID, int Quantity)>();
+        static List<(string AdminName, string AdminPass)> AdminAuth = new List<(string AdminName, string AdminPass)>();
+        static List<(string UserName, string UserPass)> UserAuth = new List<(string UserName, string UserPass)>();
         static string filePath = "C:\\Users\\Codeline User\\Documents\\Codeline Projects\\Files\\library.txt";
 
 
@@ -24,7 +26,8 @@ namespace BasicLibrary
                 Console.WriteLine("Press 1 for Admin Menu or press to 2 for User Menu or press 3 to save & exit");
                 Console.WriteLine("1- Admin Menu");
                 Console.WriteLine("2- User Menu");
-                Console.WriteLine("3- Save & Exit");
+                Console.WriteLine("3- Registration");
+                Console.WriteLine("4- Save & Exit");
                 int choice = int.Parse(Console.ReadLine());
 
                 switch (choice)
@@ -38,6 +41,10 @@ namespace BasicLibrary
                         break;
 
                     case 3:
+                        Registration();
+                        break;
+
+                    case 4:
                         SaveBooksToFile();
                         ExitFlag = true;
                         break;
@@ -77,9 +84,11 @@ namespace BasicLibrary
                     Console.WriteLine("Welcome to Library");
                     Console.WriteLine("\n Enter the number of operation you need :");
                     Console.WriteLine("\n 1- Add a New Book");
-                    Console.WriteLine("\n 2- Show All Books");
-                    Console.WriteLine("\n 3- Search for a Book by Name");
-                    Console.WriteLine("\n 4- Save and Exit");
+                    Console.WriteLine("\n 2- Edit Books info");
+                    Console.WriteLine("\n 3- Remove a Book");
+                    Console.WriteLine("\n 4- Show All Books");
+                    Console.WriteLine("\n 5- Search for a Book by Name");
+                    Console.WriteLine("\n 6- Save and Exit");
 
                     int choice = int.Parse(Console.ReadLine());
 
@@ -90,14 +99,22 @@ namespace BasicLibrary
                             break;
 
                         case 2:
-                            ShowAllBooks();
+                            EditBooks();
                             break;
 
                         case 3:
+                            RemoveBooks();
+                            break ;
+
+                        case 4:
+                            ShowAllBooks();
+                            break;
+
+                        case 5:
                             SearchForBook();
                             break;
 
-                        case 4:
+                        case 6:
                             SaveBooksToFile();
                             ExitFlag = true;
                             break;
@@ -162,6 +179,12 @@ namespace BasicLibrary
 
         }
 
+        static void Registration()
+        {
+            Console.WriteLine("Please choose one of the following:");
+
+        }
+
         static void AddNewBook()
             {
                 Console.WriteLine("Enter Book Name");
@@ -180,6 +203,16 @@ namespace BasicLibrary
                 Console.WriteLine("Book Added Succefully");
 
             }
+
+        static void EditBooks()
+        {
+
+        }
+
+        static void RemoveBooks()
+        {
+
+        }
 
         static void ShowAllBooks()
             {
