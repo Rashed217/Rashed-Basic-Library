@@ -218,6 +218,7 @@ namespace BasicLibrary
             AdminPass = Console.ReadLine();
 
             AdminAuth.Add((AdminName, AdminPass));
+            SaveAdminsToFile();
         }
 
         static void UserRegistration()
@@ -232,6 +233,7 @@ namespace BasicLibrary
             UserPass = Console.ReadLine();
 
             UserAuth.Add((UserName, UserPass));
+            SaveUsersToFile();
         }
 
         static void AddNewBook()
@@ -249,7 +251,7 @@ namespace BasicLibrary
                 int Quantity = int.Parse(Console.ReadLine());
 
                 Books.Add((name, author, ID, Quantity));
-                Console.WriteLine("Book Added Succefully");
+                Console.WriteLine("Book Added Successfully");
 
             }
 
@@ -417,6 +419,44 @@ namespace BasicLibrary
                     Console.WriteLine($"Error saving to file: {ex.Message}");
                 }
             }
+
+        static void SaveAdminsToFile()
+        {
+            try
+            {
+                using (StreamWriter writer = new StreamWriter(filePath))
+                {
+                    foreach (var admin in AdminAuth)
+                    {
+                        writer.WriteLine($"{admin.AdminName}|{admin.AdminPass}");
+                    }
+                }
+                Console.WriteLine("Admin has been registered successfully.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error saving to file: {ex.Message}");
+            }
+        }
+
+        static void SaveUsersToFile()
+        {
+            try
+            {
+                using (StreamWriter writer = new StreamWriter(filePath))
+                {
+                    foreach (var user in UserAuth)
+                    {
+                        writer.WriteLine($"{user.UserName}|{user.UserPass}");
+                    }
+                }
+                Console.WriteLine("User has been registered successfully.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error saving to file: {ex.Message}");
+            }
+        }
 
      }
  
