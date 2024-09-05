@@ -9,6 +9,8 @@ namespace BasicLibrary
         static List<(string AdminName, string AdminPass)> AdminAuth = new List<(string AdminName, string AdminPass)>();
         static List<(string UserName, string UserPass)> UserAuth = new List<(string UserName, string UserPass)>();
         static string filePath = "C:\\Users\\Codeline User\\Documents\\Codeline Projects\\Files\\library.txt";
+        static string AdminFile = "C:\\Users\\Codeline User\\Documents\\Codeline Projects\\Files\\library.txt";
+        static string UserPath = "C:\\Users\\Codeline User\\Documents\\Codeline Projects\\Files\\library.txt";
 
 
 
@@ -182,7 +184,54 @@ namespace BasicLibrary
         static void Registration()
         {
             Console.WriteLine("Please choose one of the following:");
+            Console.WriteLine("1- Admin Registration");
+            Console.WriteLine("2- User Registration");
 
+            int choice = int.Parse (Console.ReadLine());
+
+            switch (choice)
+            {
+                case 1:
+                    AdminRegistration();
+                    break;
+
+                case 2:
+                    UserRegistration();
+                    break;
+
+                default :
+                    Console.WriteLine("Invalid choice");
+                    break;
+
+            }
+        }
+
+        static void AdminRegistration()
+        {
+            string AdminName;
+            string AdminPass;
+            Console.WriteLine("Enter Admin's Username:");
+            AdminName = Console.ReadLine();
+            
+
+            Console.WriteLine("Enter Admin's Password");
+            AdminPass = Console.ReadLine();
+
+            AdminAuth.Add((AdminName, AdminPass));
+        }
+
+        static void UserRegistration()
+        {
+            string UserName;
+            string UserPass;
+            Console.WriteLine("Enter Admin's Username:");
+            UserName = Console.ReadLine();
+
+
+            Console.WriteLine("Enter Admin's Password");
+            UserPass = Console.ReadLine();
+
+            UserAuth.Add((UserName, UserPass));
         }
 
         static void AddNewBook()
