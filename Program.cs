@@ -602,16 +602,15 @@ namespace BasicLibrary
 
         static void RecommendBooks(string author)
         {
+            Console.WriteLine("\nYou may also like these books by the same author:");
 
             bool recommendationsFound = false;
             foreach (var book in Books)
             {
                 if (book.BAuthor == author && book.Quantity > 0)
                 {
-                    Console.WriteLine("\nYou may also like these books by the same author:");
                     Console.WriteLine($"- {book.BName} by {book.BAuthor}");
                     recommendationsFound = true;
-                    break;
                 }
             }
 
