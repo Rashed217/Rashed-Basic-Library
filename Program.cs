@@ -8,7 +8,7 @@ namespace BasicLibrary
         static List<(string BName, string BAuthor, int ID, int Quantity)> Books = new List<(string BName, string BAuthor, int ID, int Quantity)>();
         static List<(string AdminName, string AdminPass)> AdminAuth = new List<(string AdminName, string AdminPass)>();
         static List<(string UserName, string UserPass)> UserAuth = new List<(string UserName, string UserPass)>();
-        static string filePath = "C:\\Users\\Codeline User\\Documents\\Codeline Projects\\Files\\library.txt";
+        static string filePath = "C:\\Users\\Codeline User\\Documents\\Codeline Projects\\Files\\Library.txt";
         static string AdminFile = "C:\\Users\\Codeline User\\Documents\\Codeline Projects\\Files\\Admins Registration.txt";
         static string UserFile = "C:\\Users\\Codeline User\\Documents\\Codeline Projects\\Files\\Users Registration.txt";
 
@@ -16,7 +16,7 @@ namespace BasicLibrary
 
         static void Main(string[] args)
         {
-
+            LoadBooksFromFile();
 
             bool ExitFlag = false;
 
@@ -60,9 +60,9 @@ namespace BasicLibrary
                         break;
                 }
 
-            } while (ExitFlag != true);
+            } while (!ExitFlag);
 
-
+        }
 
         static void AdminMenu()
             {
@@ -83,9 +83,10 @@ namespace BasicLibrary
                     Console.WriteLine("Invalid password");
                 }
 
+                CurrentUser = "Admin";
+
                 bool ExitFlag = false;
 
-                LoadBooksFromFile();
 
                 do
                 {
@@ -149,12 +150,17 @@ namespace BasicLibrary
 
                     Console.Clear();
 
-                } while (ExitFlag != true);
+                } while (!ExitFlag);
+
+            CurrentUser = "";
             }
 
         static void UserMenu()
 
             {
+
+                CurrentUser = "User";
+
                 bool ExitFlag = false;
 
                 do
@@ -195,10 +201,10 @@ namespace BasicLibrary
                             break;
 
                     }
-                } while (ExitFlag != true);
-            }
+                } while (!ExitFlag);
 
-        }
+            CurrentUser = "";
+            }
 
         static void Registration()
         {
@@ -335,7 +341,7 @@ namespace BasicLibrary
             bool bookFoundByName = false;
             for (int i = Books.Count - 1; i >= 0; i--)
             {
-                if (Books[i].BName.ToLower() == bookNameToRemove.ToLower())
+                if (Books[i].BName == bookNameToRemove)
                 {
                     Books.RemoveAt(i);
                     bookFoundByName = true;
@@ -404,38 +410,37 @@ namespace BasicLibrary
 
         static void BorrowBook()
         {
-            
             foreach (var Book in Books)
             {
                 Console.WriteLine(Book.BName);
             }
 
-            Console.WriteLine("Enter the name of the book you want to borrow:");
+            Console.WriteLine("[{currentUser}] Enter the name of the book you want to borrow:");
             string bookName = Console.ReadLine();
-            bool borrowed = false;
+            bool bookFound = false;
 
-            for (int i = 0;i < Books.Count;i++)
+            for (int i = 0; i < Books.Count; i++)
             {
-                if (Books[i].BName == bookName && Books[i].Quantity > 0)
+                if (Books[i].BName == bookName)
                 {
-                    Books[i] = (Books[i].BName, Books[i].BAuthor, Books[i].ID, Books[i].Quantity -1);
-                    Console.WriteLine("Book has been borrowed successfully");
-                    borrowed = true;
-                }
-
-                if (Books[i].BName == bookName && Books[i].Quantity <= 0)
-                {
-                    Console.WriteLine("Books is already borrowed");
-                    borrowed = true;
-                }
-
-                if (Books[i].BName != bookName)
-                {
-                    Console.WriteLine("Book not found");
-                    borrowed = false;
+                    bookFound = true;
+                    if (Books[i].Quantity > 0)
+                    {
+                        Books[i] = (Books[i].BName, Books[i].BAuthor, Books[i].ID, Books[i].Quantity - 1);
+                        Console.WriteLine("[{currentUser}] has successfully borrowed the book.");
+                    }
+                    else
+                    {
+                        Console.WriteLine("This book is already borrowed.");
+                    }
+                    break;
                 }
             }
 
+            if (!bookFound)
+            {
+                Console.WriteLine("Book not found.");
+            }
         }
 
         static void ReturnBook()
@@ -445,18 +450,24 @@ namespace BasicLibrary
                 Console.WriteLine(Book.BName);
             }
 
-            Console.WriteLine("\nEnter the name of the book you want to return:");
+            Console.WriteLine("[{currentUser}] Enter the name of the book you want to return:");
             string bookName = Console.ReadLine();
-            bool borrowed = false;
+            bool bookFound = false;
 
             for (int i = 0; i < Books.Count; i++)
             {
-                if (Books[i].BName == bookName && Books[i].Quantity >= 0)
+                if (Books[i].BName == bookName)
                 {
                     Books[i] = (Books[i].BName, Books[i].BAuthor, Books[i].ID, Books[i].Quantity + 1);
-                    Console.WriteLine("Book has been returned successfully");
-                    borrowed = true;
+                    Console.WriteLine("[{currentUser}] has successfully returned teh book.");
+                    bookFound = true;
+                    break;
                 }
+            }
+
+            if (!bookFound)
+            {
+                Console.WriteLine("Book not found.");
             }
         }
 
@@ -567,6 +578,8 @@ namespace BasicLibrary
             Console.WriteLine($"Number of books available: {availableBooks}");
             Console.WriteLine($"Number of books borrowed: {borrowedBooks}");
         }
+
+        static string CurrentUser = "";
 
     }
 
