@@ -527,6 +527,7 @@ namespace BasicLibrary
             Console.WriteLine($"[{CurrentUser}] Enter the name of the book you want to borrow:");
             string bookName = Console.ReadLine();
             bool bookFound = false;
+            string borrowedAuthor = "";
 
             for (int i = 0; i < Books.Count; i++)
             {
@@ -536,6 +537,7 @@ namespace BasicLibrary
                     if (Books[i].Quantity > 0)
                     {
                         Books[i] = (Books[i].BName, Books[i].BAuthor, Books[i].ID, Books[i].Quantity - 1);
+                        borrowedAuthor = Books[i].BAuthor;
                         Console.WriteLine($"[{CurrentUser}] has successfully borrowed the book.");
                     }
                     else
@@ -549,6 +551,31 @@ namespace BasicLibrary
             if (!bookFound)
             {
                 Console.WriteLine("Book not found.");
+            }
+
+            else
+            {
+                RecommendBooks(borrowedAuthor);
+            }
+        }
+
+        static void RecommendBooks(string author)
+        {
+            Console.WriteLine("\nYou may also like these books by the same author:");
+
+            bool recommendationsFound = false;
+            foreach (var book in Books)
+            {
+                if (book.BAuthor == author && book.Quantity > 0)
+                {
+                    Console.WriteLine($"- {book.BName} by {book.BAuthor}");
+                    recommendationsFound = true;
+                }
+            }
+
+            if (!recommendationsFound)
+            {
+                Console.WriteLine("No other books by this author are available right now.");
             }
         }
 
