@@ -173,13 +173,22 @@ namespace BasicLibrary
 
         {
 
-            Console.WriteLine("Enter your username:");
+            Console.Write("Enter Your Username: ");
             string username = Console.ReadLine();
-            Console.WriteLine("Enter your password");
-            string password = Console.ReadLine();
 
-            Console.WriteLine($"Welcome {username}");
+            Console.Write("Enter Your Password: ");
+            string UserPassword = Console.ReadLine();
 
+            bool isAuthenticated = AuthenticateUser(UserFile, username, UserPassword);
+
+            if (isAuthenticated)
+            {
+                Console.WriteLine($"Welcome {username}");
+            }
+            else
+            {
+                Console.WriteLine("Authentication failed. Please enter correct info.");
+            }
 
             CurrentUser = username;
 
@@ -187,7 +196,6 @@ namespace BasicLibrary
 
             do
             {
-                Console.WriteLine("Welcome User");
                 Console.WriteLine("\n Enter the number of operation you need :");
                 Console.WriteLine("\n 1- Search for a Book by Name");
                 Console.WriteLine("\n 2- Borrow a Book");
@@ -226,6 +234,39 @@ namespace BasicLibrary
             } while (!ExitFlag);
 
             CurrentUser = "";
+        }
+
+        static bool AuthenticateUser(string UserFile, string username, string UserPassword)
+        {
+            try
+            {
+                string[] userLines = File.ReadAllLines(UserFile); //Array to store each of the file
+
+                foreach (string line in userLines)
+                {
+                    string[] parts = line.Split('|'); // Split each line into username and password
+                    if (parts.Length == 2)
+                    {
+                        string storedUsername = parts[0];
+                        string storedPassword = parts[1];
+
+                        if (storedUsername == username && storedPassword == UserPassword) // Check if username and password match
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+            catch (FileNotFoundException)
+            {
+                Console.WriteLine("User file not found.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred: {ex.Message}");
+            }
+
+            return false;
         }
 
         static void MasterAdminMenu()
