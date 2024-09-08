@@ -185,9 +185,10 @@ namespace BasicLibrary
             {
                 Console.WriteLine($"Welcome {username}");
             }
-            else
+            else if (!isAuthenticated)
             {
                 Console.WriteLine("Authentication failed. Please enter correct info.");
+                return;
             }
 
             CurrentUser = username;
