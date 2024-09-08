@@ -5,13 +5,13 @@ namespace BasicLibrary
 {
     internal class Program
     {
+        static string CurrentUser = "";
         static List<(string BName, string BAuthor, int ID, int Quantity)> Books = new List<(string BName, string BAuthor, int ID, int Quantity)>();
         static List<(string AdminName, string AdminPass)> AdminAuth = new List<(string AdminName, string AdminPass)>();
         static List<(string UserName, string UserPass)> UserAuth = new List<(string UserName, string UserPass)>();
         static string filePath = "C:\\Users\\Codeline User\\Documents\\Codeline Projects\\Files\\Library.txt";
         static string AdminFile = "C:\\Users\\Codeline User\\Documents\\Codeline Projects\\Files\\Admins Registration.txt";
         static string UserFile = "C:\\Users\\Codeline User\\Documents\\Codeline Projects\\Files\\Users Registration.txt";
-
 
 
         static void Main(string[] args)
@@ -159,7 +159,15 @@ namespace BasicLibrary
 
             {
 
-                CurrentUser = "User";
+            Console.WriteLine("Enter your username:");
+            string username = Console.ReadLine();
+            Console.WriteLine("Enter your password");
+            string password = Console.ReadLine();
+
+            Console.WriteLine($"Welcome {username}");
+
+
+        CurrentUser = username;
 
                 bool ExitFlag = false;
 
@@ -415,7 +423,7 @@ namespace BasicLibrary
                 Console.WriteLine(Book.BName);
             }
 
-            Console.WriteLine("[{currentUser}] Enter the name of the book you want to borrow:");
+            Console.WriteLine($"[{CurrentUser}] Enter the name of the book you want to borrow:");
             string bookName = Console.ReadLine();
             bool bookFound = false;
 
@@ -427,7 +435,7 @@ namespace BasicLibrary
                     if (Books[i].Quantity > 0)
                     {
                         Books[i] = (Books[i].BName, Books[i].BAuthor, Books[i].ID, Books[i].Quantity - 1);
-                        Console.WriteLine("[{currentUser}] has successfully borrowed the book.");
+                        Console.WriteLine($"[{CurrentUser}] has successfully borrowed the book.");
                     }
                     else
                     {
@@ -450,7 +458,7 @@ namespace BasicLibrary
                 Console.WriteLine(Book.BName);
             }
 
-            Console.WriteLine("[{currentUser}] Enter the name of the book you want to return:");
+            Console.WriteLine($"[{CurrentUser}] Enter the name of the book you want to return:");
             string bookName = Console.ReadLine();
             bool bookFound = false;
 
@@ -459,7 +467,7 @@ namespace BasicLibrary
                 if (Books[i].BName == bookName)
                 {
                     Books[i] = (Books[i].BName, Books[i].BAuthor, Books[i].ID, Books[i].Quantity + 1);
-                    Console.WriteLine("[{currentUser}] has successfully returned teh book.");
+                    Console.WriteLine($"[{CurrentUser}] has successfully returned the book.");
                     bookFound = true;
                     break;
                 }
@@ -578,8 +586,6 @@ namespace BasicLibrary
             Console.WriteLine($"Number of books available: {availableBooks}");
             Console.WriteLine($"Number of books borrowed: {borrowedBooks}");
         }
-
-        static string CurrentUser = "";
 
     }
 
