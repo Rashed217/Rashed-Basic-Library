@@ -6,7 +6,7 @@ namespace BasicLibrary
     internal class Program
     {
         static string CurrentUser = "";
-        static List<(string BName, string BAuthor, int ID, int Quantity)> Books = new List<(string BName, string BAuthor, int ID, int Quantity)>();
+        static List<(string BName, string BAuthor, int ID, int Quantity, int BrwCopies, float Price, string Category, int BrwPeriod)> Books = new List<(string BName, string BAuthor, int ID, int Quantity, int BrwCopies, float Price, string Category, int BrwPeriod)>();
         static List<(string AdminName, string AdminPass)> AdminAuth = new List<(string AdminName, string AdminPass)>();
         static List<(string UserName, string UserPass)> UserAuth = new List<(string UserName, string UserPass)>();
         static string filePath = "C:\\Users\\Codeline User\\Documents\\Codeline Projects\\Files\\Library.txt";
@@ -23,7 +23,7 @@ namespace BasicLibrary
 
             do
             {
-
+                Console.Clear();
                 Console.WriteLine("Press 1 for Admin Menu,  press to 2 for User Menu, press 3 for registration or press 4 to save & exit");
                 Console.WriteLine("1- Admin Menu");
                 Console.WriteLine("2- User Menu");
@@ -362,9 +362,11 @@ namespace BasicLibrary
 
         static void Registration()
         {
+            Console.Clear();
             Console.WriteLine("Please choose one of the following:");
             Console.WriteLine("1- Admin Registration");
             Console.WriteLine("2- User Registration");
+            Console.WriteLine("3- Return");
 
             int choice = int.Parse(Console.ReadLine());
 
@@ -376,6 +378,9 @@ namespace BasicLibrary
 
                 case 2:
                     UserRegistration();
+                    break;
+
+                case 3:
                     break;
 
                 default:
@@ -413,7 +418,6 @@ namespace BasicLibrary
 
             UserAuth.Add((UserName, UserPass));
             SaveUsersToFile();
-            Console.Clear();
         }
 
         static void AddNewBook()
@@ -430,7 +434,18 @@ namespace BasicLibrary
             Console.WriteLine("Enter Book Quantity");
             int Quantity = int.Parse(Console.ReadLine());
 
-            Books.Add((name, author, ID, Quantity));
+            int brwCopies = 0;
+
+            Console.WriteLine("Enter Book Price:");
+            int price = int.Parse(Console.ReadLine());
+
+            Console.WriteLine("Enter Book Category:");
+            string Categories = Console.ReadLine();
+
+            Console.WriteLine("Enter the maximum period for borrowing:");
+            int brwPeriod = int.Parse(Console.ReadLine());
+
+            Books.Add((name, author, ID, Quantity, brwCopies, price, Categories, brwPeriod));
             Console.WriteLine("Book Added Successfully");
 
         }
@@ -550,6 +565,9 @@ namespace BasicLibrary
                     Console.WriteLine("\nBook Author is : " + Books[i].BAuthor);
                     Console.WriteLine("\nBook ID is : " + Books[i].ID);
                     Console.WriteLine("\nQuantity Available : " + Books[i].Quantity);
+                    Console.WriteLine("\nBorrowed Copies : " + Books[i].BrwCopies);
+                    Console.WriteLine("\nBook Price : " + Books[i].Price);
+                    Console.WriteLine("\nBook Category : " + Books[i].Category);
                     available = true;
                     break;
                 }
