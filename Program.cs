@@ -61,35 +61,36 @@ namespace BasicLibrary
                 }
 
             } while (!ExitFlag);
+            Console.Clear();
 
         }
 
         static void AdminMenu()
         {
 
-            Console.WriteLine("Enter the username: (Hint: admin or masteradmin)");
+            Console.WriteLine("Enter the username: (Hint: admin or master)");
             string username;
             while (true)
             {
                 username = Console.ReadLine();
-                if (username == "admin" || username == "masteradmin")
+                if (username == "admin" || username == "master")
                     break;
                 else
                     Console.WriteLine("Invalid username, try again:");
             }
 
-            Console.WriteLine("\nEnter the password: (Hint: 12345 or masterpass)");
+            Console.WriteLine("\nEnter the password: (Hint: 12345 or master)");
             string password;
             while (true)
             {
                 password = Console.ReadLine();
-                if ((username == "admin" && password == "12345") || (username == "masteradmin" && password == "masterpass"))
+                if ((username == "admin" && password == "12345") || (username == "master" && password == "master"))
                     break;
                 else
                     Console.WriteLine("Invalid password, try again:");
             }
 
-            if (username == "masteradmin")
+            if (username == "master")
             {
                 MasterAdminMenu();
             }
@@ -172,7 +173,7 @@ namespace BasicLibrary
         static void UserMenu()
 
         {
-
+            LoadUsersFromFile();
             Console.Write("Enter Your Username: ");
             string username = Console.ReadLine();
 
@@ -272,6 +273,8 @@ namespace BasicLibrary
 
         static void MasterAdminMenu()
         {
+            LoadAdminsFromFile();
+            Console.Clear();
             Console.WriteLine("Welcome Master Admin!");
             bool ExitFlag = false;
 
@@ -401,7 +404,7 @@ namespace BasicLibrary
         {
             string UserName;
             string UserPass;
-            Console.WriteLine("Enter Users's Username:");
+            Console.WriteLine("Enter User's Username:");
             UserName = Console.ReadLine();
 
 
@@ -410,6 +413,7 @@ namespace BasicLibrary
 
             UserAuth.Add((UserName, UserPass));
             SaveUsersToFile();
+            Console.Clear();
         }
 
         static void AddNewBook()
@@ -710,6 +714,58 @@ namespace BasicLibrary
             catch (Exception ex)
             {
                 Console.WriteLine($"Error saving to file: {ex.Message}");
+            }
+        }
+
+        static void LoadAdminsFromFile()
+        {
+            try
+            {
+                if (File.Exists(AdminFile))
+                {
+                    using (StreamReader reader = new StreamReader(AdminFile))
+                    {
+                        string line;
+                        while ((line = reader.ReadLine()) != null)
+                        {
+                            var parts = line.Split('|');
+                            if (parts.Length == 2)
+                            {
+                                AdminAuth.Add((parts[0], parts[1]));
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error loading from file: {ex.Message}");
+            }
+        }
+
+        static void LoadUsersFromFile()
+        {
+            try
+            {
+                if (File.Exists(UserFile))
+                {
+                    using (StreamReader reader = new StreamReader(UserFile))
+                    {
+                        string line;
+                        while ((line = reader.ReadLine()) != null)
+                        {
+                            var parts = line.Split('|');
+                            if (parts.Length == 2)
+                            {
+                                UserAuth.Add((parts[0], parts[1]));
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error loading from file: {ex.Message}");
             }
         }
 
