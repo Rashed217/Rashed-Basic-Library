@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System.Net;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace BasicLibrary
@@ -8,10 +9,12 @@ namespace BasicLibrary
         static string CurrentUser = "";
         static List<(string BName, string BAuthor, int ID, int Quantity, int BrwCopies, float Price, string Category, int BrwPeriod)> Books = new List<(string BName, string BAuthor, int ID, int Quantity, int BrwCopies, float Price, string Category, int BrwPeriod)>();
         static List<(string AdminName, string AdminPass)> AdminAuth = new List<(string AdminName, string AdminPass)>();
-        static List<(string UserName, string UserPass)> UserAuth = new List<(string UserName, string UserPass)>();
+        static List<(string UserName, string UserEmail, string UserPass)> UserAuth = new List<(string UserName, string UserEmail, string UserPass)>();
+        static List<(int UserID, int BookID, string BookName, int BorrowedQnt, int BDate, string ReturnDate, string ActualRD, int Review)> BorrowingBooks = new List<(int UserID, int BookID, string BookName, int BorrowedQnt, int BDate, string ReturnDate, string ActualRD, int Review)>();
         static string filePath = "C:\\Users\\Codeline User\\Documents\\Codeline Projects\\Files\\Library.txt";
         static string AdminFile = "C:\\Users\\Codeline User\\Documents\\Codeline Projects\\Files\\Admins Registration.txt";
         static string UserFile = "C:\\Users\\Codeline User\\Documents\\Codeline Projects\\Files\\Users Registration.txt";
+        static string BorrowedBooks = "C:\\Users\\Codeline User\\Documents\\Codeline Projects\\Files\\Borrowed Books.txt";
 
 
         static void Main(string[] args)
@@ -437,7 +440,7 @@ namespace BasicLibrary
             int brwCopies = 0;
 
             Console.WriteLine("Enter Book Price:");
-            int price = int.Parse(Console.ReadLine());
+            float price = float.Parse(Console.ReadLine());
 
             Console.WriteLine("Enter Book Category:");
             string Categories = Console.ReadLine();
@@ -678,8 +681,8 @@ namespace BasicLibrary
             {
                 if (Books[i].BName == bookName)
                 {
-                    Books[i] = (Books[i].BName, Books[i].BAuthor, Books[i].ID, Books[i].Quantity + 1);
-                    Console.WriteLine($"[{CurrentUser}] has successfully returned the book.");
+                    Books[i] = (Books[i].BName, Books[i].BAuthor, Books[i].ID, Books[i].Quantity + 1, Books[i].BrwCopies, Books[i].Price, Books[i].Category, Books[i].BrwPeriod);
+            Console.WriteLine($"[{CurrentUser}] has successfully returned the book.");
                     bookFound = true;
                     break;
                 }
@@ -703,9 +706,9 @@ namespace BasicLibrary
                         while ((line = reader.ReadLine()) != null)
                         {
                             var parts = line.Split('|');
-                            if (parts.Length == 4)
+                            if (parts.Length == 8)
                             {
-                                Books.Add((parts[0], parts[1], int.Parse(parts[2]), int.Parse(parts[3])));
+                                Books.Add((parts[0], parts[1], int.Parse(parts[2]), int.Parse(parts[3]), int.Parse(parts[4]), float.Parse(parts[5]), parts[6], int.Parse(parts[7])));
                             }
                         }
                     }
