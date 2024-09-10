@@ -8,13 +8,15 @@ namespace BasicLibrary
     {
         static string CurrentUser = "";
         static List<(string BName, string BAuthor, int ID, int Quantity, int BrwCopies, float Price, string Category, int BrwPeriod)> Books = new List<(string BName, string BAuthor, int ID, int Quantity, int BrwCopies, float Price, string Category, int BrwPeriod)>();
-        static List<(string AdminName, string AdminPass)> AdminAuth = new List<(string AdminName, string AdminPass)>();
+        static List<(string AdminName, string AdminEmail, string AdminPass)> AdminAuth = new List<(string AdminName, string AdminEmail, string AdminPass)>();
         static List<(string UserName, string UserEmail, string UserPass)> UserAuth = new List<(string UserName, string UserEmail, string UserPass)>();
-        static List<(int UserID, int BookID, string BookName, int BorrowedQnt, int BDate, string ReturnDate, string ActualRD, int Review)> BorrowingBooks = new List<(int UserID, int BookID, string BookName, int BorrowedQnt, int BDate, string ReturnDate, string ActualRD, int Review)>();
+        static List<(int UserID, int BookID, string BookName, int BorrowedQnt, int BDate, string ReturnDate, string ActualRD, int Rating, bool isReturned)> BorrowingBooks = new List<(int UserID, int BookID, string BookName, int BorrowedQnt, int BDate, string ReturnDate, string ActualRD, int Rating, bool isReturned)>();
+        static List<(string CID, string CName, int NOFBooks)> BooksCategories = new List<(string CID, string CName, int NOFBooks)>();
         static string filePath = "C:\\Users\\Codeline User\\Documents\\Codeline Projects\\Files\\Library.txt";
         static string AdminFile = "C:\\Users\\Codeline User\\Documents\\Codeline Projects\\Files\\Admins Registration.txt";
         static string UserFile = "C:\\Users\\Codeline User\\Documents\\Codeline Projects\\Files\\Users Registration.txt";
         static string BorrowedBooks = "C:\\Users\\Codeline User\\Documents\\Codeline Projects\\Files\\Borrowed Books.txt";
+        static string CategoriesFile = "C:\\Users\\Codeline User\\Documents\\Codeline Projects\\Files\\Books Categories.txt";
 
 
         static void Main(string[] args)
@@ -205,7 +207,8 @@ namespace BasicLibrary
                 Console.WriteLine("\n 1- Search for a Book by Name");
                 Console.WriteLine("\n 2- Borrow a Book");
                 Console.WriteLine("\n 3- Return a Book ");
-                Console.WriteLine("\n 4- Save and Exit");
+                Console.WriteLine("\n 4- View Profile ");
+                Console.WriteLine("\n 5- Save and Exit");
 
                 if (!int.TryParse(Console.ReadLine(), out int choice))
                 {
@@ -227,7 +230,11 @@ namespace BasicLibrary
                         ReturnBook();
                         break;
 
-                    case 4:
+                    //case 4:
+                    //    ViewProfile();
+                    //    break;
+
+                    case 5:
                         ExitFlag = true;
                         break;
 
@@ -253,7 +260,7 @@ namespace BasicLibrary
                     if (parts.Length == 2)
                     {
                         string storedUsername = parts[0];
-                        string storedPassword = parts[1];
+                        string storedPassword = parts[2];
 
                         if (storedUsername == username && storedPassword == UserPassword) // Check if username and password match
                         {
@@ -396,30 +403,36 @@ namespace BasicLibrary
         static void AdminRegistration()
         {
             string AdminName;
+            string AdminEmail;
             string AdminPass;
             Console.WriteLine("Enter Admin's Username:");
             AdminName = Console.ReadLine();
 
+            Console.WriteLine("Enter Admin's Email:");
+            AdminEmail = Console.ReadLine();
 
             Console.WriteLine("Enter Admin's Password");
             AdminPass = Console.ReadLine();
 
-            AdminAuth.Add((AdminName, AdminPass));
+            AdminAuth.Add((AdminName, AdminEmail, AdminPass));
             SaveAdminsToFile();
         }
 
         static void UserRegistration()
         {
             string UserName;
+            string UserEmail;
             string UserPass;
             Console.WriteLine("Enter User's Username:");
             UserName = Console.ReadLine();
 
+            Console.WriteLine("Enter your Email:");
+            UserEmail = Console.ReadLine();
 
             Console.WriteLine("Enter User's Password");
             UserPass = Console.ReadLine();
 
-            UserAuth.Add((UserName, UserPass));
+            UserAuth.Add((UserName, UserEmail, UserPass));
             SaveUsersToFile();
         }
 
@@ -568,6 +581,14 @@ namespace BasicLibrary
                 sb.Append("Book ").Append(BookNumber).Append(" ID : ").Append(Books[i].ID);
                 sb.AppendLine();
                 sb.Append("Book ").Append(BookNumber).Append(" Quantity : ").Append(Books[i].Quantity);
+                sb.AppendLine();
+                sb.Append("Book ").Append(BookNumber).Append(" Borrowed Copies : ").Append(Books[i].BrwCopies);
+                sb.AppendLine();
+                sb.Append("Book ").Append(BookNumber).Append(" Price : ").Append(Books[i].Price);
+                sb.AppendLine();
+                sb.Append("Book ").Append(BookNumber).Append(" Category : ").Append(Books[i].Category);
+                sb.AppendLine();
+                sb.Append("Book ").Append(BookNumber).Append(" Maximum Borrowing Period : ").Append(Books[i].BrwPeriod);
                 sb.AppendLine().AppendLine();
                 Console.WriteLine(sb.ToString());
                 sb.Clear();
@@ -694,6 +715,12 @@ namespace BasicLibrary
             }
         }
 
+        //static void ViewProfile()
+        //{
+        //    Console.WriteLine ($"\nYour Username is : {UserAuth[i].UserName}");
+        //    Console.WriteLine($"\nYour Email is : {UserAuth[i].UserEmail}");
+        //}
+
         static void LoadBooksFromFile()
         {
             try
@@ -729,7 +756,7 @@ namespace BasicLibrary
                 {
                     foreach (var book in Books)
                     {
-                        writer.WriteLine($"{book.BName}|{book.BAuthor}|{book.ID} |{book.Quantity}");
+                        writer.WriteLine($"{book.BName}|{book.BAuthor}|{book.ID}|{book.Quantity}|{book.BrwCopies}|{book.Price} |{book.Category}|{book.BrwPeriod}");
                     }
                 }
                 Console.WriteLine("Books saved to file successfully.");
@@ -748,7 +775,7 @@ namespace BasicLibrary
                 {
                     foreach (var admin in AdminAuth)
                     {
-                        writer.WriteLine($"{admin.AdminName}|{admin.AdminPass}");
+                        writer.WriteLine($"{admin.AdminName}|{admin.AdminEmail}|{admin.AdminPass}");
                     }
                 }
                 Console.WriteLine("Admin has been registered successfully.");
@@ -773,7 +800,7 @@ namespace BasicLibrary
                             var parts = line.Split('|');
                             if (parts.Length == 2)
                             {
-                                AdminAuth.Add((parts[0], parts[1]));
+                                //AdminAuth.Add((parts[0], parts[1]), parts[2]);
                             }
                         }
                     }
@@ -799,7 +826,7 @@ namespace BasicLibrary
                             var parts = line.Split('|');
                             if (parts.Length == 2)
                             {
-                                UserAuth.Add((parts[0], parts[1]));
+                                //UserAuth.Add((parts[0], parts[1]));
                             }
                         }
                     }
@@ -819,7 +846,7 @@ namespace BasicLibrary
                 {
                     foreach (var user in UserAuth)
                     {
-                        writer.WriteLine($"{user.UserName}|{user.UserPass}");
+                        writer.WriteLine($"{user.UserName}|{user.UserEmail}|{user.UserPass}");
                     }
                 }
                 Console.WriteLine("User has been registered successfully.");
