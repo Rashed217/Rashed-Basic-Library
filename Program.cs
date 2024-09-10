@@ -483,19 +483,40 @@ namespace BasicLibrary
             Console.WriteLine($"Current Name: {book.BName}");
             Console.WriteLine("Enter new Name :");
             string newName = Console.ReadLine();
-            if (!string.IsNullOrEmpty(newName)) book = (newName, book.BAuthor, book.ID, book.Quantity);
+            if (!string.IsNullOrEmpty(newName)) book = (newName, book.BAuthor, book.ID, book.Quantity, book.BrwCopies, book.Price, book.Category, book.BrwPeriod);
 
             Console.WriteLine($"Current Author: {book.BAuthor}");
             Console.WriteLine("Enter new Author :");
             string newAuthor = Console.ReadLine();
-            if (!string.IsNullOrEmpty(newAuthor)) book = (book.BName, newAuthor, book.ID, book.Quantity);
+            if (!string.IsNullOrEmpty(newAuthor)) book = (book.BName, newAuthor, book.ID, book.Quantity, book.BrwCopies, book.Price, book.Category, book.BrwPeriod);
 
             Console.WriteLine($"Current Quantity: {book.Quantity}");
             Console.WriteLine("Enter new Quantity :");
             string newQuantityStr = Console.ReadLine();
             if (int.TryParse(newQuantityStr, out int newQuantity))
             {
-                book = (book.BName, book.BAuthor, book.ID, newQuantity);
+                book = (book.BName, book.BAuthor, book.ID, newQuantity, book.BrwCopies, book.Price, book.Category, book.BrwPeriod);
+            }
+
+            Console.WriteLine($"Current Price: {book.Price}");
+            Console.WriteLine("Entre new price :");
+            string newPriceStr = Console.ReadLine();
+            if (int.TryParse (newPriceStr, out int newPrice))
+            {
+                book = (book.BName, book.BAuthor, book.ID, book.Quantity, book.BrwCopies, newPrice, book.Category, book.BrwPeriod);
+            }
+
+            Console.WriteLine($"Current Author: {book.Category}");
+            Console.WriteLine("Enter new Author :");
+            string newCategory = Console.ReadLine();
+            if (!string.IsNullOrEmpty(newCategory)) book = (book.BName, book.BAuthor, book.ID, book.Quantity, book.BrwCopies, book.Price, newCategory, book.BrwPeriod);
+
+            Console.WriteLine($"Current Maximum borrowing period: {book.BrwPeriod}");
+            Console.WriteLine("Entre new period :");
+            string newPeriodStr = Console.ReadLine();
+            if (int.TryParse(newPriceStr, out int newPeriod))
+            {
+                book = (book.BName, book.BAuthor, book.ID, book.Quantity, book.BrwCopies, book.Price, book.Category, newPeriod);
             }
 
             Books[bookIndex] = book;
@@ -599,7 +620,7 @@ namespace BasicLibrary
                     bookFound = true;
                     if (Books[i].Quantity > 0)
                     {
-                        Books[i] = (Books[i].BName, Books[i].BAuthor, Books[i].ID, Books[i].Quantity - 1);
+                        Books[i] = (Books[i].BName, Books[i].BAuthor, Books[i].ID, Books[i].Quantity - 1, Books[i].BrwCopies, Books[i].Price, Books[i].Category, Books[i].BrwPeriod);
                         borrowedAuthor = Books[i].BAuthor;
                         Console.WriteLine($"[{CurrentUser}] has successfully borrowed the book.");
                     }
