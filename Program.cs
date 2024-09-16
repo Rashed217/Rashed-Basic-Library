@@ -1,12 +1,14 @@
 ﻿using System.Net;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Text.RegularExpressions;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace BasicLibrary
 {
     internal class Program
     {
+
         static string CurrentUser = "";
 
         static List<(string BName, string BAuthor, int BID, int Copies, int BorrowedCopies, float Price, string Category, int BorrowPeriod)> Books = new List<(string BName, string BAuthor, int BID, int Copies, int BorrowedCopies, float Price, string Category, int BorrowPeriod)>();
@@ -18,7 +20,7 @@ namespace BasicLibrary
 
         static string filePath = "C:\\Users\\Codeline User\\Documents\\Codeline Projects\\Files\\Library.txt";
         static string AdminFile = "C:\\Users\\Codeline User\\Documents\\Codeline Projects\\Files\\AdminsFile.txt";
-        static string UserFile = "C:\\Users\\Codeline User\\Documents\\Codeline Projects\\Files\\Users Registration.txt";
+        static string UserFile = "C:\\Users\\Codeline User\\Documents\\Codeline Projects\\Files\\UsersFile.txt";
         static string BorrowedBooks = "C:\\Users\\Codeline User\\Documents\\Codeline Projects\\Files\\BorrowingFile.txt";
         static string CategoriesFile = "C:\\Users\\Codeline User\\Documents\\Codeline Projects\\Files\\CategoriesFile.txt";
 
@@ -234,9 +236,9 @@ namespace BasicLibrary
                         ReturnBook();
                         break;
 
-                    //case 4:
-                    //    ViewProfile();
-                    //    break;
+                    case 4:
+                        ViewProfile();
+                        break;
 
                     case 5:
                         ExitFlag = true;
@@ -256,19 +258,22 @@ namespace BasicLibrary
         {
             try
             {
-                string[] userLines = File.ReadAllLines(UserFile); //Array to store each of the file
-
-                foreach (string line in userLines)
+                if (File.Exists(UserFile))
                 {
-                    string[] parts = line.Split('|'); // Split each line into username and password
-                    if (parts.Length == 3)
-                    {
-                        string storedUsername = parts[0];
-                        string storedPassword = parts[2];
+                    string[] userLines = File.ReadAllLines(UserFile); //Array to store each of the file
 
-                        if (storedUsername == username.ToLower() && storedPassword == UserPassword) // Check if username and password match
+                    foreach (string line in userLines)
+                    {
+                        string[] parts = line.Split('|'); // Split each line into username and password
+                        if (parts.Length == 4)
                         {
-                            return true;
+                            string storedUsername = parts[1];
+                            string storedPassword = parts[3];
+
+                            if (storedUsername == username.ToLower() && storedPassword == UserPassword) // Check if username and password match
+                            {
+                                return true;
+                            }
                         }
                     }
                 }
@@ -454,11 +459,68 @@ namespace BasicLibrary
             Console.WriteLine("Enter your Email:");
             UserEmail = Console.ReadLine().ToLower();
 
+            if (!EmailValidator.IsValidEmail(UserEmail))
+            {
+                Console.WriteLine("Invalid email format.");
+                return;
+            }
+
             Console.WriteLine("Enter User's Password");
             UserPass = Console.ReadLine();
 
+            if (!PasswordValidator.IsValidPassword(UserPass))
+            {
+                Console.WriteLine("Invalid password format. Password must be at least 8 characters long and include uppercase letters, lowercase letters, numbers, and special characters.");
+                return;
+            }
+
             UserAuth.Add((newUID, UserName, UserEmail, UserPass));
             SaveUsersToFile();
+
+            Console.WriteLine("Press any key to continue");
+            Console.ReadLine();
+            Console.Clear();
+        }
+
+        private class EmailValidator
+        {
+            public static bool IsValidEmail(string email)
+            {
+                if (string.IsNullOrWhiteSpace(email))
+                    return false;
+
+                try
+                {
+                    var emailPattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
+                    var regex = new Regex(emailPattern, RegexOptions.IgnoreCase);
+                    return regex.IsMatch(email);
+                }
+                catch (RegexMatchTimeoutException)
+                {
+                    return false;
+                }
+            }
+        }
+
+        private class PasswordValidator
+        {
+            public static bool IsValidPassword(string password)
+            {
+                if (string.IsNullOrWhiteSpace(password))
+                    return false;
+
+                var lengthRequirement = new Regex(@".{8,}", RegexOptions.None); // Minimum 8 characters
+                var uppercaseRequirement = new Regex(@"[A-Z]", RegexOptions.None); // At least one uppercase letter
+                var lowercaseRequirement = new Regex(@"[a-z]", RegexOptions.None); // At least one lowercase letter
+                var numberRequirement = new Regex(@"[0-9]", RegexOptions.None); // At least one number
+                var specialCharRequirement = new Regex(@"[\W_]", RegexOptions.None); // At least one special character
+
+                return lengthRequirement.IsMatch(password) &&
+                       uppercaseRequirement.IsMatch(password) &&
+                       lowercaseRequirement.IsMatch(password) &&
+                       numberRequirement.IsMatch(password) &&
+                       specialCharRequirement.IsMatch(password);
+            }
         }
 
         static void AddNewBook()
@@ -599,45 +661,44 @@ namespace BasicLibrary
 
         static void ShowAllBooks()
         {
-            StringBuilder sb = new StringBuilder();
 
-            int BookNumber = 0;
+            const int colWidthName = 16;
+            const int colWidthAuthor = 16;
+            const int colWidthID = 10;
+            const int colWidthCopies = 10;
+            const int colWidthBorrowed = 15;
+            const int colWidthPrice = 10;
+            const int colWidthCategory = 23;
+            const int colWidthBorrowPeriod = 20;
 
-            for (int i = 0; i < Books.Count; i++)
+            Console.WriteLine($"{PadRight("Name", colWidthName)}{PadRight("Author", colWidthAuthor)}{PadRight("ID", colWidthID)}" +
+                          $"{PadRight("Copies", colWidthCopies)}{PadRight("Borrowed", colWidthBorrowed)}{PadRight("Price", colWidthPrice)}" +
+                          $"{PadRight("Category", colWidthCategory)}{PadRight("Borrow Period", colWidthBorrowPeriod)}");
+            Console.WriteLine(new string('-', colWidthName + colWidthAuthor + colWidthID + colWidthCopies + colWidthBorrowed + colWidthPrice + colWidthCategory + colWidthBorrowPeriod));
+
+            // Print each book
+            foreach (var book in Books)
             {
-                BookNumber = i + 1;
-                sb.Append("Book ").Append(BookNumber).Append(" name : ").Append(Books[i].BName);
-                sb.AppendLine();
-                sb.Append("Book ").Append(BookNumber).Append(" Author : ").Append(Books[i].BAuthor);
-                sb.AppendLine();
-                sb.Append("Book ").Append(BookNumber).Append(" ID : ").Append(Books[i].BID);
-                sb.AppendLine();
-                sb.Append("Book ").Append(BookNumber).Append(" Quantity : ").Append(Books[i].Copies);
-                sb.AppendLine();
-                sb.Append("Book ").Append(BookNumber).Append(" Borrowed Copies : ").Append(Books[i].BorrowedCopies);
-                sb.AppendLine();
-                sb.Append("Book ").Append(BookNumber).Append(" Price : ").Append(Books[i].Price);
-                sb.AppendLine();
-                sb.Append("Book ").Append(BookNumber).Append(" Category : ").Append(Books[i].Category);
-                sb.AppendLine();
-                sb.Append("Book ").Append(BookNumber).Append(" Maximum Borrowing Period : ").Append(Books[i].BorrowPeriod);
-                sb.AppendLine().AppendLine();
-                Console.WriteLine(sb.ToString());
-                sb.Clear();
-
-
+                Console.WriteLine($"{PadRight(book.BName, colWidthName)}{PadRight(book.BAuthor, colWidthAuthor)}{PadRight(book.BID.ToString(), colWidthID)}" +
+                                  $"{PadRight(book.Copies.ToString(), colWidthCopies)}{PadRight(book.BorrowedCopies.ToString(), colWidthBorrowed)}{PadRight(book.Price.ToString("C"), colWidthPrice)}" +
+                                  $"{PadRight(book.Category, colWidthCategory)}{PadRight(book.BorrowPeriod.ToString(), colWidthBorrowPeriod)}");
             }
+        }
+
+        static string PadRight(string text, int length)
+        {
+            return text.PadRight(length);
         }
 
         static void SearchForBook()
         {
             Console.WriteLine("Enter the book name you want");
-            string name = Console.ReadLine();
+            string name = Console.ReadLine().ToLower();
             bool available = false;
 
             for (int i = 0; i < Books.Count; i++)
             {
-                if (Books[i].BName == name)
+                if (Books[i].BName.ToLower().Contains(name))
                 {
                     Console.WriteLine("This book is available");
                     Console.WriteLine("\nBook Author is : " + Books[i].BAuthor);
@@ -647,7 +708,6 @@ namespace BasicLibrary
                     Console.WriteLine("\nBook Price : " + Books[i].Price);
                     Console.WriteLine("\nBook Category : " + Books[i].Category);
                     available = true;
-                    break;
                 }
 
             }
@@ -748,11 +808,34 @@ namespace BasicLibrary
             }
         }
 
-        //static void ViewProfile()
-        //{
-        //    Console.WriteLine($"\nYour Username is : {UserAuth[i].UserName}");
-        //    Console.WriteLine($"\nYour Email is : {UserAuth[i].UserEmail}");
-        //}
+        static void ViewProfile()
+        {
+            (int UID, string UName, string Email, string Password) userProfile = GetUserProfile(CurrentUser);
+
+            if (userProfile != default) // Return a default value when the user profile is not found. = null
+            {
+                Console.WriteLine($"This is {CurrentUser}'s profile:");
+                Console.WriteLine($"Name: {userProfile.UName}");
+                Console.WriteLine($"Email: {userProfile.Email}");
+                // Add more profile fields as needed
+            }
+            else
+            {
+                Console.WriteLine("Failed to retrieve user profile.");
+            }
+        }
+
+        static (int UID, string UName, string Email, string Password) GetUserProfile(string username)
+        {
+            foreach (var user in UserAuth)
+            {
+                if (user.UName.ToLower() == username.ToLower())
+                {
+                    return user;
+                }
+            }
+            return default;
+        }
 
         static void LoadBooksFromFile()
         {
@@ -857,9 +940,9 @@ namespace BasicLibrary
                         while ((line = reader.ReadLine()) != null)
                         {
                             var parts = line.Split('|');
-                            if (parts.Length == 2)
+                            if (parts.Length == 4)
                             {
-                                //UserAuth.Add((parts[0], parts[1]));
+                                UserAuth.Add((int.Parse(parts[0]), parts[1], parts[2], parts[3]));
                             }
                         }
                     }
@@ -879,7 +962,7 @@ namespace BasicLibrary
                 {
                     foreach (var user in UserAuth)
                     {
-                        writer.WriteLine($"{user.UName}|{user.Email}|{user.Password}");
+                        writer.WriteLine($"{user.UID}|{user.UName}|{user.Email}|{user.Password}");
                     }
                 }
                 Console.WriteLine("User has been registered successfully.");
