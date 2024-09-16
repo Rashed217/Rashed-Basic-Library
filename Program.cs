@@ -1,13 +1,13 @@
 ﻿using System.Net;
 using System.Runtime.CompilerServices;
 using System.Text;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace BasicLibrary
 {
     internal class Program
     {
         static string CurrentUser = "";
-        static int TotalBorrowedBooks = 0;
 
         static List<(string BName, string BAuthor, int BID, int Copies, int BorrowedCopies, float Price, string Category, int BorrowPeriod)> Books = new List<(string BName, string BAuthor, int BID, int Copies, int BorrowedCopies, float Price, string Category, int BorrowPeriod)>();
         static List<(int AID, string AName, string AdminEmail, string AdminPass)> AdminAuth = new List<(int ID, string AName, string Email, string Password)>();
@@ -17,10 +17,10 @@ namespace BasicLibrary
 
 
         static string filePath = "C:\\Users\\Codeline User\\Documents\\Codeline Projects\\Files\\Library.txt";
-        static string AdminFile = "C:\\Users\\Codeline User\\Documents\\Codeline Projects\\Files\\Admins Registration.txt";
+        static string AdminFile = "C:\\Users\\Codeline User\\Documents\\Codeline Projects\\Files\\AdminsFile.txt";
         static string UserFile = "C:\\Users\\Codeline User\\Documents\\Codeline Projects\\Files\\Users Registration.txt";
-        static string BorrowedBooks = "C:\\Users\\Codeline User\\Documents\\Codeline Projects\\Files\\Borrowed Books.txt";
-        static string CategoriesFile = "C:\\Users\\Codeline User\\Documents\\Codeline Projects\\Files\\Books Categories.txt";
+        static string BorrowedBooks = "C:\\Users\\Codeline User\\Documents\\Codeline Projects\\Files\\BorrowingFile.txt";
+        static string CategoriesFile = "C:\\Users\\Codeline User\\Documents\\Codeline Projects\\Files\\CategoriesFile.txt";
 
 
         static void Main(string[] args)
@@ -81,7 +81,7 @@ namespace BasicLibrary
             string username;
             while (true)
             {
-                username = Console.ReadLine();
+                username = Console.ReadLine().ToLower();
                 if (username == "admin" || username == "master")
                     break;
                 else
@@ -184,7 +184,7 @@ namespace BasicLibrary
         {
             LoadUsersFromFile();
             Console.WriteLine("Enter Your Username: ");
-            string username = Console.ReadLine();
+            string username = Console.ReadLine().ToLower();
 
             Console.WriteLine("Enter Your Password: ");
             string UserPassword = Console.ReadLine();
@@ -266,7 +266,7 @@ namespace BasicLibrary
                         string storedUsername = parts[0];
                         string storedPassword = parts[2];
 
-                        if (storedUsername == username && storedPassword == UserPassword) // Check if username and password match
+                        if (storedUsername == username.ToLower() && storedPassword == UserPassword) // Check if username and password match
                         {
                             return true;
                         }
@@ -339,12 +339,12 @@ namespace BasicLibrary
         static void RemoveAdmin()
         {
             Console.WriteLine("Enter the admin username you want to remove:");
-            string adminToRemove = Console.ReadLine();
+            string adminToRemove = Console.ReadLine().ToLower();
             bool adminFound = false;
 
             for (int i = AdminAuth.Count - 1; i >= 0; i--)
             {
-                if (AdminAuth[i].AName == adminToRemove)
+                if (AdminAuth[i].AName.ToLower() == adminToRemove)
                 {
                     AdminAuth.RemoveAt(i);
                     adminFound = true;
@@ -420,10 +420,10 @@ namespace BasicLibrary
             }
 
             Console.WriteLine("Enter Admin's Username:");
-            AdminName = Console.ReadLine();
+            AdminName = Console.ReadLine().ToLower();
 
             Console.WriteLine("Enter Admin's Email:");
-            AdminEmail = Console.ReadLine();
+            AdminEmail = Console.ReadLine().ToLower();
 
             Console.WriteLine("Enter Admin's Password");
             AdminPass = Console.ReadLine();
@@ -449,10 +449,10 @@ namespace BasicLibrary
 
 
             Console.WriteLine("Enter User's Username:");
-            UserName = Console.ReadLine();
+            UserName = Console.ReadLine().ToLower();
 
             Console.WriteLine("Enter your Email:");
-            UserEmail = Console.ReadLine();
+            UserEmail = Console.ReadLine().ToLower();
 
             Console.WriteLine("Enter User's Password");
             UserPass = Console.ReadLine();
@@ -625,6 +625,7 @@ namespace BasicLibrary
                 Console.WriteLine(sb.ToString());
                 sb.Clear();
 
+
             }
         }
 
@@ -668,7 +669,6 @@ namespace BasicLibrary
             string bookName = Console.ReadLine();
             bool bookFound = false;
             string borrowedAuthor = "";
-            int TotalBooksBorrowed = 0;
 
             for (int i = 0; i < Books.Count; i++)
             {
@@ -679,7 +679,6 @@ namespace BasicLibrary
                     {
                         Books[i] = (Books[i].BName, Books[i].BAuthor, Books[i].BID, Books[i].Copies - 1, Books[i].BorrowedCopies + 1, Books[i].Price, Books[i].Category, Books[i].BorrowPeriod);
                         borrowedAuthor = Books[i].BAuthor;
-                        TotalBorrowedBooks++;
                         Console.WriteLine($"[{CurrentUser}] has successfully borrowed the book.");
                     }
                     else
@@ -751,7 +750,7 @@ namespace BasicLibrary
 
         //static void ViewProfile()
         //{
-        //    Console.WriteLine ($"\nYour Username is : {UserAuth[i].UserName}");
+        //    Console.WriteLine($"\nYour Username is : {UserAuth[i].UserName}");
         //    Console.WriteLine($"\nYour Email is : {UserAuth[i].UserEmail}");
         //}
 
@@ -832,9 +831,9 @@ namespace BasicLibrary
                         while ((line = reader.ReadLine()) != null)
                         {
                             var parts = line.Split('|');
-                            if (parts.Length == 2)
+                            if (parts.Length == 4)
                             {
-                                //AdminAuth.Add((parts[0], parts[1]), parts[2]);
+                                AdminAuth.Add((int.Parse(parts[0]), parts[1], parts[2], parts[3]));
                             }
                         }
                     }
